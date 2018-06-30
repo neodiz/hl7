@@ -1,14 +1,11 @@
-package golevel7
+package hl7_test
 
 import (
 	"os"
 	"testing"
-)
 
-type my7 struct {
-	FirstName string `hl7:"PID.5.1"`
-	LastName  string `hl7:"PID.5.0"`
-}
+	"github.com/lenaten/hl7"
+)
 
 func TestDecode(t *testing.T) {
 	fname := "./testdata/msg.hl7"
@@ -19,7 +16,7 @@ func TestDecode(t *testing.T) {
 	defer file.Close()
 
 	st := my7{}
-	msgs, err := NewDecoder(file).Messages()
+	msgs, err := hl7.NewDecoder(file).Messages()
 	if err != nil {
 		t.Error(err)
 	}

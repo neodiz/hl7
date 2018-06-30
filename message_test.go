@@ -1,8 +1,10 @@
-package golevel7
+package hl7_test
 
 import (
 	"os"
 	"testing"
+
+	"github.com/lenaten/hl7"
 )
 
 func readFile(fname string) ([]byte, error) {
@@ -25,8 +27,8 @@ func TestMessage(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	msg := &Message{Value: data}
-	msg.parse()
+	msg := &hl7.Message{Value: data}
+	msg.Parse()
 	if err != nil {
 		t.Error(err)
 	}
@@ -38,8 +40,8 @@ func TestMessage(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	msg = &Message{Value: data}
-	msg.parse()
+	msg = &hl7.Message{Value: data}
+	msg.Parse()
 	if err != nil {
 		t.Error(err)
 	}
@@ -51,8 +53,8 @@ func TestMessage(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	msg = &Message{Value: data}
-	msg.parse()
+	msg = &hl7.Message{Value: data}
+	msg.Parse()
 	if err != nil {
 		t.Error(err)
 	}
@@ -64,8 +66,8 @@ func TestMessage(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	msg = &Message{Value: data}
-	msg.parse()
+	msg = &hl7.Message{Value: data}
+	msg.Parse()
 	if err != nil {
 		t.Error(err)
 	}
@@ -82,7 +84,7 @@ func TestMsgUnmarshal(t *testing.T) {
 	}
 	defer file.Close()
 
-	msgs, err := NewDecoder(file).Messages()
+	msgs, err := hl7.NewDecoder(file).Messages()
 	if err != nil {
 		t.Fatal(err)
 	}

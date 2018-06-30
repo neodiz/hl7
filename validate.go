@@ -1,4 +1,4 @@
-package golevel7
+package hl7
 
 // VCheck is the type validity check to be done
 type VCheck int

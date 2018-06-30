@@ -1,15 +1,18 @@
-package golevel7
+package hl7_test
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/lenaten/hl7"
+)
 
 func TestFind(t *testing.T) {
-
 	data, err := readFile("./testdata/msg3.hl7")
 	if err != nil {
 		t.Fatal(err)
 	}
-	msg := &Message{Value: data}
-	msg.parse()
+	msg := &hl7.Message{Value: data}
+	msg.Parse()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -32,13 +35,12 @@ func TestFind(t *testing.T) {
 }
 
 func TestFindAll(t *testing.T) {
-
 	data, err := readFile("./testdata/msg3.hl7")
 	if err != nil {
 		t.Fatal(err)
 	}
-	msg := &Message{Value: data}
-	msg.parse()
+	msg := &hl7.Message{Value: data}
+	msg.Parse()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -71,8 +73,8 @@ func TestRepFields(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	msg := &Message{Value: data}
-	msg.parse()
+	msg := &hl7.Message{Value: data}
+	msg.Parse()
 	if err != nil {
 		t.Fatal(err)
 	}

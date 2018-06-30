@@ -1,4 +1,4 @@
-package golevel7
+package hl7
 
 import (
 	"bytes"
@@ -22,7 +22,7 @@ func (s *Segment) String() string {
 	return str
 }
 
-func (s *Segment) parse(seps *Delimeters) error {
+func (s *Segment) Parse(seps *Delimeters) error {
 	if len(s.Value) < 3 {
 		return fmt.Errorf("Invalid segment. Length %v", len(s.Value))
 	}
@@ -41,7 +41,7 @@ func (s *Segment) parse(seps *Delimeters) error {
 		case ch == eof || (ch == endMsg && seps.LFTermMsg):
 			if ii > i {
 				fld := Field{Value: s.Value[i : ii-1], SeqNum: seq}
-				fld.parse(seps)
+				fld.Parse(seps)
 				s.Fields = append(s.Fields, fld)
 			}
 			return nil
@@ -55,7 +55,7 @@ func (s *Segment) parse(seps *Delimeters) error {
 				s.forceField([]byte(s.Value[i:ii-1]), seq)
 			} else {
 				fld := Field{Value: s.Value[i : ii-1], SeqNum: seq}
-				fld.parse(seps)
+				fld.Parse(seps)
 				s.Fields = append(s.Fields, fld)
 			}
 			i = ii
@@ -67,7 +67,7 @@ func (s *Segment) parse(seps *Delimeters) error {
 			}
 		case ch == seps.Repetition:
 			fld := Field{Value: s.Value[i : ii-1], SeqNum: seq}
-			fld.parse(seps)
+			fld.Parse(seps)
 			s.Fields = append(s.Fields, fld)
 			i = ii
 		case ch == seps.Escape:

@@ -1,4 +1,4 @@
-# Go Level 7 [![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](https://godoc.org/github.com/dshills/golevel7)
+# Go Level 7 [![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](https://godoc.org/github.com/dshills/hl7)
 
 ## Overview
 
@@ -16,7 +16,7 @@
 Note: Message building is not currently working for MSH segments. Coming soon...
 
 ## Installation
-	go get github.com/dshills/golevel7
+	go get github.com/dshills/hl7
 
 ## Usage
 
@@ -42,17 +42,17 @@ type my7 struct {
 }
 st := my7{}
 
-err := golevel7.Unmarshal(data, &st)
+err := hl7.Unmarshal(data, &st)
 
 // from an io.Reader
 
-golevel7.NewDecoder(reader).Decode(&st)
+hl7.NewDecoder(reader).Decode(&st)
 ```
 
 ### Message Query
 
 ```go
-msg, err := golevel7.NewDecoder(reader).Message()
+msg, err := hl7.NewDecoder(reader).Message()
 
 // First matching value
 val, err := msg.Find("PID.5.1")
@@ -68,16 +68,16 @@ vals, err := msg.FindAll("PID.11.1")
 		FirstName string `hl7:"PID.5.1"`
 		LastName  string `hl7:"PID.5.0"`
 	}
-	mi := golevel7.MsgInfo{
+	mi := hl7.MsgInfo{
 		SendingApp:        "MyApp",
 		SendingFacility:   "MyPlace",
 		ReceivingApp:      "EMR",
 		ReceivingFacility: "MedicalPlace",
 		MessageType:       "ORM^001",
 	}
-	msg, err := golevel7.StartMessage(mi)
+	msg, err := hl7.StartMessage(mi)
 	am := aMsg{FirstName: "Davin", LastName: "Hills"}
-	bstr, err = golevel7.Marshal(msg, &am)
+	bstr, err = hl7.Marshal(msg, &am)
 
 	// Manually
 
@@ -108,7 +108,7 @@ vals, err := msg.FindAll("PID.11.1")
 		FirstName:         "Davin",
 		LastName:          "Hills",
 	}
-	err := golevel7.NewEncoder(writer).Encode(&my)
+	err := hl7.NewEncoder(writer).Encode(&my)
 ```
 
 ### Message Validation
@@ -118,12 +118,12 @@ Message validation is accomplished using the IsValid function. Create a slice of
 A number of validation slices are already defined and can be combined to build custom validation criteria. The NewValidMSH24() function is one example. It returns a set of validations for the MSH segment for version 2.4 of the HL7 specification.
 
 ```go
-val := []golevel7.Validation{
+val := []hl7.Validation{
 	Validation{Location: "MSH.0", VCheck: SpecificValue, Value: "MSH"},
 	Validation{Location: "MSH.1", VCheck: HasValue},
 	Validation{Location: "MSH.2", VCheck: HasValue},
 }
-msg, err := golevel7.NewDecoder(reader).Message()
+msg, err := hl7.NewDecoder(reader).Message()
 valid, failures := msg.IsValid(val)
 ```
 

@@ -1,4 +1,4 @@
-package golevel7
+package hl7
 
 import (
 	"bytes"
@@ -129,7 +129,7 @@ func (m *Message) Set(l *Location, val string) error {
 	return nil
 }
 
-func (m *Message) parse() error {
+func (m *Message) Parse() error {
 	if err := m.parseSep(); err != nil {
 		return err
 	}
@@ -147,13 +147,13 @@ func (m *Message) parse() error {
 			v := m.Value[i:ii]
 			if len(v) > 4 { // seg name + field sep
 				seg := Segment{Value: v}
-				seg.parse(&m.Delimeters)
+				seg.Parse(&m.Delimeters)
 				m.Segments = append(m.Segments, seg)
 			}
 			return nil
 		case ch == segTerm:
 			seg := Segment{Value: m.Value[i:ii]}
-			seg.parse(&m.Delimeters)
+			seg.Parse(&m.Delimeters)
 			m.Segments = append(m.Segments, seg)
 			i = ii
 		case ch == m.Delimeters.Escape:

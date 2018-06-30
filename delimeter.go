@@ -1,4 +1,4 @@
-package golevel7
+package hl7
 
 const eof = rune(0)
 const endMsg = '\x0A'

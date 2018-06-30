@@ -1,22 +1,26 @@
-package golevel7
+package hl7_test
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/lenaten/hl7"
+)
 
 func TestFieldParse(t *testing.T) {
 	val := []byte("520 51st Street^^Denver^CO^80020^USA")
-	seps := NewDelimeters()
-	fld := &Field{Value: val}
-	fld.parse(seps)
+	seps := hl7.NewDelimeters()
+	fld := &hl7.Field{Value: val}
+	fld.Parse(seps)
 	if len(fld.Components) != 6 {
 		t.Errorf("Expected 6 components got %d\n", len(fld.Components))
 	}
 }
 
 func TestFieldSet(t *testing.T) {
-	seps := NewDelimeters()
-	fld := &Field{}
+	seps := hl7.NewDelimeters()
+	fld := &hl7.Field{}
 	loc := "ZZZ.1.10"
-	l := NewLocation(loc)
+	l := hl7.NewLocation(loc)
 	err := fld.Set(l, "TEST", seps)
 	if err != nil {
 		t.Error(err)

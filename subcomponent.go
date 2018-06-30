@@ -1,4 +1,4 @@
-package golevel7
+package hl7
 
 // SubComponent is an HL7 subcomponent
 type SubComponent struct {

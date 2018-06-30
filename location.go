@@ -1,4 +1,4 @@
-package golevel7
+package hl7
 
 import (
 	"strconv"

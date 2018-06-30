@@ -1,4 +1,4 @@
-package golevel7
+package hl7
 
 import (
 	"bufio"
@@ -62,7 +62,7 @@ func (d *Decoder) Messages() ([]*Message, error) {
 	z := []*Message{}
 	for _, buf := range bufs {
 		msg := NewMessage(buf)
-		if err := msg.parse(); err != nil {
+		if err := msg.Parse(); err != nil {
 			return nil, err
 		}
 		z = append(z, msg)

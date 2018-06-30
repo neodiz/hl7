@@ -1,4 +1,4 @@
-package golevel7
+package hl7
 
 // ACK is struct for an ack message
 type ACK struct {

@@ -1,22 +1,26 @@
-package golevel7
+package hl7_test
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/lenaten/hl7"
+)
 
 func TestSegParse(t *testing.T) {
-	val := []byte("PID|||12001||Jones^John^^^Mr.||19670824|M|||123 West St.^^Denver^CO^80020^USA~520 51st Street^^Denver^CO^80020^USA|||||||")
-	seps := NewDelimeters()
-	seg := &Segment{Value: val}
-	seg.parse(seps)
+	val := []byte("PID|||12001||Jones^John^^^Mr.||19670824|M|||123 West St.^^Denver^CO^80020^USA~520 51st Street^^Denver^CO^80020^USA|||||||")
+	seps := hl7.NewDelimeters()
+	seg := &hl7.Segment{Value: val}
+	seg.Parse(seps)
 	if len(seg.Fields) != 20 {
 		t.Errorf("Expected 20 fields got %d\n", len(seg.Fields))
 	}
 }
 
 func TestSegSet(t *testing.T) {
-	seps := NewDelimeters()
+	seps := hl7.NewDelimeters()
 	loc := "ZZZ.10"
-	l := NewLocation(loc)
-	seg := &Segment{}
+	l := hl7.NewLocation(loc)
+	seg := &hl7.Segment{}
 	err := seg.Set(l, "TEST", seps)
 	if err != nil {
 		t.Error(seg)

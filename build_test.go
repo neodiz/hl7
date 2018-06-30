@@ -1,17 +1,21 @@
-package golevel7
+package hl7_test
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/lenaten/hl7"
+)
 
 func TestBuildMessage(t *testing.T) {
 
-	mi := MsgInfo{
+	mi := hl7.MsgInfo{
 		SendingApp:        "BettrLife",
 		SendingFacility:   "UnivIa",
 		ReceivingApp:      "Epic",
 		ReceivingFacility: "UnivIa",
 		MessageType:       "ORM^001",
 	}
-	msg, err := StartMessage(mi)
+	msg, err := hl7.StartMessage(mi)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -86,19 +90,19 @@ type aMsg struct {
 }
 
 func TestMessageBuilding(t *testing.T) {
-	mi := MsgInfo{
+	mi := hl7.MsgInfo{
 		SendingApp:        "BettrLife",
 		SendingFacility:   "UnivIa",
 		ReceivingApp:      "Epic",
 		ReceivingFacility: "UnivIa",
 		MessageType:       "ORM^001",
 	}
-	msg, err := StartMessage(mi)
+	msg, err := hl7.StartMessage(mi)
 	if err != nil {
 		t.Fatal(err)
 	}
 	am := aMsg{FirstName: "Davin", LastName: "Hills"}
-	_, err = Marshal(msg, &am)
+	_, err = hl7.Marshal(msg, &am)
 	if err != nil {
 		t.Error(err)
 	}

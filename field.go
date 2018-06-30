@@ -1,4 +1,4 @@
-package golevel7
+package hl7
 
 import (
 	"bytes"
@@ -21,7 +21,7 @@ func (f *Field) String() string {
 	return str
 }
 
-func (f *Field) parse(seps *Delimeters) error {
+func (f *Field) Parse(seps *Delimeters) error {
 	r := bytes.NewReader(f.Value)
 	i := 0
 	ii := 0
@@ -32,13 +32,13 @@ func (f *Field) parse(seps *Delimeters) error {
 		case ch == eof || (ch == endMsg && seps.LFTermMsg):
 			if ii > i {
 				cmp := Component{Value: f.Value[i : ii-1]}
-				cmp.parse(seps)
+				cmp.Parse(seps)
 				f.Components = append(f.Components, cmp)
 			}
 			return nil
 		case ch == seps.Component:
 			cmp := Component{Value: f.Value[i : ii-1]}
-			cmp.parse(seps)
+			cmp.Parse(seps)
 			f.Components = append(f.Components, cmp)
 			i = ii
 		case ch == seps.Escape:

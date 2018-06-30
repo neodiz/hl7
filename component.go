@@ -1,4 +1,4 @@
-package golevel7
+package hl7
 
 import (
 	"bytes"
@@ -19,7 +19,7 @@ func (c *Component) String() string {
 	return str
 }
 
-func (c *Component) parse(seps *Delimeters) error {
+func (c *Component) Parse(seps *Delimeters) error {
 	r := bytes.NewReader(c.Value)
 	i := 0
 	ii := 0

@@ -1,4 +1,4 @@
-package golevel7
+package hl7
 
 import (
 	"errors"
@@ -38,7 +38,7 @@ func (e *Encoder) Encode(it interface{}) error {
 // It will panic if interface{} is not a pointer to a struct
 func Marshal(m *Message, it interface{}) ([]byte, error) {
 	seg := Segment{Value: []byte("MSH" + string(m.Delimeters.Field) + m.Delimeters.DelimeterField)}
-	seg.parse(&m.Delimeters)
+	seg.Parse(&m.Delimeters)
 	m.Segments = append(m.Segments, seg)
 	st := reflect.ValueOf(it).Elem()
 	stt := st.Type()
