@@ -144,6 +144,9 @@ func (m *Message) Parse() error {
 		ii++
 		switch {
 		case ch == eof || (ch == endMsg && m.Delimeters.LFTermMsg):
+			if i >= cap(m.Value) || ii >= cap(m.Value) {
+				return fmt.Errorf("unknown value. value: %s. i: %d. ii: %d", m.Value, i, ii)
+			}
 			v := m.Value[i:ii]
 			if len(v) > 4 { // seg name + field sep
 				seg := Segment{Value: v}
