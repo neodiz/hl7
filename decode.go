@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"io"
+	"strings"
 )
 
 // Decoder reades hl7 messages from a stream
@@ -47,6 +48,7 @@ func Split(buf []byte) [][]byte {
 			continue
 		}
 		msg = bytes.TrimLeft(msg, "\x0b")
+		msg = []byte(strings.Replace(string(msg), "\n", "\r", -1))
 		vmsgs = append(vmsgs, msg)
 	}
 	return vmsgs
