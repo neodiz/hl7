@@ -1,8 +1,8 @@
 package golevel7
 
 import (
-	"fmt"
 	"errors"
+	"fmt"
 	"strings"
 )
 
@@ -24,14 +24,14 @@ func (s *Segment) String() string {
 
 func (s *Segment) isMSH() bool {
 	var toCheck []rune
-	if len(s.Value)>=3 {
+	if len(s.Value) >= 3 {
 		toCheck = s.Value[:3]
-	} else if len(s.Fields)!=0{
+	} else if len(s.Fields) != 0 {
 		f, err := s.Field(0)
 		if err != nil {
 			return false
 		}
-		toCheck=f.Value[:3]
+		toCheck = f.Value[:3]
 	} else {
 		return false
 	}
@@ -58,6 +58,10 @@ func (s *Segment) parse(seps *Delimeters) error {
 		switch {
 		case ch == eof || (ch == endMsg && seps.LFTermMsg):
 			if ii > i {
+				start := i
+				if ii > i+1 && s.Value[i] == seps.Component {
+					start++
+				}
 				fld := Field{Value: s.Value[i : ii-1], SeqNum: seq}
 				fld.parse(seps)
 				s.Fields = append(s.Fields, fld)
@@ -72,7 +76,11 @@ func (s *Segment) parse(seps *Delimeters) error {
 				// the separator list is a field in MSH seq 2
 				s.forceField(s.Value[i:ii-1], seq)
 			} else {
-				fld := Field{Value: s.Value[i : ii-1], SeqNum: seq}
+				start := i
+				if s.Value[i] == seps.Component {
+					start++
+				}
+				fld := Field{Value: s.Value[start : ii-1], SeqNum: seq}
 				fld.parse(seps)
 				s.Fields = append(s.Fields, fld)
 			}
