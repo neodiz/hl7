@@ -9,7 +9,7 @@ type ACK struct {
 
 // Acknowledge generates an ACK message based on the MsgInfo struct
 // st can be nil for success or to send an AE code
-func Acknowledge(mi MsgInfo, st error) *Message {
+func Acknowledge(mi MsgInfo, st error) (*Message, []byte) {
 	amsg, _ := StartMessage(*NewMsgInfoAck(&mi))
 	ack := ACK{}
 	ack.Code = "AA"
@@ -19,6 +19,6 @@ func Acknowledge(mi MsgInfo, st error) *Message {
 		ack.ErrMsg = st.Error()
 	}
 
-	Marshal(amsg, &ack)
-	return amsg
+	bstr, _ := Marshal(amsg, &ack)
+	return amsg, bstr
 }
