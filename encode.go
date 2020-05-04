@@ -37,9 +37,6 @@ func (e *Encoder) Encode(it interface{}) error {
 // Marshal will insert values into a message
 // It will panic if interface{} is not a pointer to a struct
 func Marshal(m *Message, it interface{}) ([]byte, error) {
-	//seg := Segment{Value: []rune("MSH" + string(m.Delimeters.Field) + m.Delimeters.DelimeterField)}
-	//seg.parse(&m.Delimeters)
-	//m.Segments = append(m.Segments, seg)
 	st := reflect.ValueOf(it).Elem()
 	stt := st.Type()
 	for i := 0; i < st.NumField(); i++ {
@@ -53,5 +50,6 @@ func Marshal(m *Message, it interface{}) ([]byte, error) {
 			}
 		}
 	}
+	m.Set(NewLocation("MSH.1"), string(m.Delimeters.Field)+m.Delimeters.DelimeterField)
 	return []byte(string(m.Value)), nil
 }

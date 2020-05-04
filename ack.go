@@ -11,6 +11,7 @@ type ACK struct {
 // st can be nil for success or to send an AE code
 func Acknowledge(mi MsgInfo, st error) (*Message, []byte) {
 	amsg, _ := StartMessage(*NewMsgInfoAck(&mi))
+	amsg.Delimeters = *NewDelimeters()
 	ack := ACK{}
 	ack.Code = "AA"
 	ack.OrgControlID = mi.ControlID
