@@ -20,7 +20,7 @@ func (c *Component) String() string {
 }
 
 func (c *Component) parse(seps *Delimeters) error {
-	r :=  strings.NewReader(string(c.Value))
+	r := strings.NewReader(string(c.Value))
 	i := 0
 	ii := 0
 	for {
