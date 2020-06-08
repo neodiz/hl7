@@ -56,7 +56,7 @@ func (m *Message) Segment(s string) (*Segment, error) {
 			return &m.Segments[i], nil
 		}
 	}
-	return nil, ErrNotFound
+	return nil, ErrSegmentNotFound
 }
 
 // AllSegments returns the first matching segmane with name s
@@ -72,7 +72,7 @@ func (m *Message) AllSegments(s string) ([]*Segment, error) {
 		}
 	}
 	if len(segs) == 0 {
-		return segs, ErrNotFound
+		return segs, ErrSegmentNotFound
 	}
 	return segs, nil
 }

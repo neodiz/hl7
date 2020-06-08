@@ -5,5 +5,7 @@ import (
 )
 
 var (
-	ErrNotFound = fmt.Errorf("Segment not found")
+	ErrSegmentNotFound     = fmt.Errorf("Segment not found")
+	ErrFieldNotFound       = fmt.Errorf("Field not found")
+	ErrComponentOutOfRange = fmt.Errorf("Component out of range")
 )

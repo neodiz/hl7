@@ -1,7 +1,6 @@
 package golevel7
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -59,7 +58,7 @@ func (f *Field) encode(seps *Delimeters) []rune {
 // Component returns the component i
 func (f *Field) Component(i int) (*Component, error) {
 	if i >= len(f.Components) {
-		return nil, fmt.Errorf("Component out of range")
+		return nil, ErrComponentOutOfRange
 	}
 	return &f.Components[i], nil
 }

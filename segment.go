@@ -1,8 +1,8 @@
 package golevel7
 
 import (
-	"fmt"
 	"errors"
+	"fmt"
 	"strings"
 )
 
@@ -24,14 +24,14 @@ func (s *Segment) String() string {
 
 func (s *Segment) isMSH() bool {
 	var toCheck []rune
-	if len(s.Value)>=3 {
+	if len(s.Value) >= 3 {
 		toCheck = s.Value[:3]
-	} else if len(s.Fields)!=0{
+	} else if len(s.Fields) != 0 {
 		f, err := s.Field(0)
 		if err != nil {
 			return false
 		}
-		toCheck=f.Value[:3]
+		toCheck = f.Value[:3]
 	} else {
 		return false
 	}
@@ -130,7 +130,7 @@ func (s *Segment) Field(i int) (*Field, error) {
 			return &s.Fields[idx], nil
 		}
 	}
-	return nil, fmt.Errorf("Field not found")
+	return nil, ErrFieldNotFound
 }
 
 // AllFields returns all fields with sequence number i
@@ -140,9 +140,6 @@ func (s *Segment) AllFields(i int) ([]*Field, error) {
 		if fld.SeqNum == i {
 			flds = append(flds, &s.Fields[idx])
 		}
-	}
-	if len(flds) == 0 {
-		return flds, fmt.Errorf("Field not found")
 	}
 	return flds, nil
 }
