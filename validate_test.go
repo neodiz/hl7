@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/lenaten/hl7"
+	"github.com/freemed/hl7"
 )
 
 func TestValid(t *testing.T) {

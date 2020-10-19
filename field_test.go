@@ -3,14 +3,14 @@ package hl7_test
 import (
 	"testing"
 
-	"github.com/lenaten/hl7"
+	"github.com/freemed/hl7"
 )
 
 func TestFieldParse(t *testing.T) {
-	val := []byte("520 51st Street^^Denver^CO^80020^USA")
-	seps := hl7.NewDelimeters()
-	fld := &hl7.Field{Value: val}
-	fld.Parse(seps)
+	val := []rune("520 51st Street^^Denver^CO^80020^USA")
+	seps := NewDelimeters()
+	fld := &Field{Value: val}
+	fld.parse(seps)
 	if len(fld.Components) != 6 {
 		t.Errorf("Expected 6 components got %d\n", len(fld.Components))
 	}
@@ -29,6 +29,6 @@ func TestFieldSet(t *testing.T) {
 		t.Fatalf("Expected 11 got %d\n", len(fld.Components))
 	}
 	if string(fld.Components[10].SubComponents[0].Value) != "TEST" {
-		t.Errorf("Expected TEST got %s\n", fld.Components[10].SubComponents[0].Value)
+		t.Errorf("Expected TEST got %s\n", string(fld.Components[10].SubComponents[0].Value))
 	}
 }

@@ -1,15 +1,14 @@
 package hl7
 
 import (
-	"bytes"
-	"fmt"
+	"strings"
 )
 
 // Field is an HL7 field
 type Field struct {
 	SeqNum     int
 	Components []Component
-	Value      []byte
+	Value      []rune
 }
 
 func (f *Field) String() string {
@@ -21,8 +20,8 @@ func (f *Field) String() string {
 	return str
 }
 
-func (f *Field) Parse(seps *Delimeters) error {
-	r := bytes.NewReader(f.Value)
+func (f *Field) parse(seps *Delimeters) error {
+	r := strings.NewReader(string(f.Value))
 	i := 0
 	ii := 0
 	for {
@@ -32,13 +31,13 @@ func (f *Field) Parse(seps *Delimeters) error {
 		case ch == eof || (ch == endMsg && seps.LFTermMsg):
 			if ii > i {
 				cmp := Component{Value: f.Value[i : ii-1]}
-				cmp.Parse(seps)
+				cmp.parse(seps)
 				f.Components = append(f.Components, cmp)
 			}
 			return nil
 		case ch == seps.Component:
 			cmp := Component{Value: f.Value[i : ii-1]}
-			cmp.Parse(seps)
+			cmp.parse(seps)
 			f.Components = append(f.Components, cmp)
 			i = ii
 		case ch == seps.Escape:
@@ -48,18 +47,18 @@ func (f *Field) Parse(seps *Delimeters) error {
 	}
 }
 
-func (f *Field) encode(seps *Delimeters) []byte {
-	buf := [][]byte{}
+func (f *Field) encode(seps *Delimeters) []rune {
+	buf := []string{}
 	for _, c := range f.Components {
-		buf = append(buf, c.Value)
+		buf = append(buf, string(c.Value))
 	}
-	return bytes.Join(buf, []byte(string(seps.Component)))
+	return []rune(string(strings.Join(buf, string(seps.Component))))
 }
 
 // Component returns the component i
 func (f *Field) Component(i int) (*Component, error) {
 	if i >= len(f.Components) {
-		return nil, fmt.Errorf("Component out of range")
+		return nil, ErrComponentOutOfRange
 	}
 	return &f.Components[i], nil
 }

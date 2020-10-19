@@ -3,7 +3,7 @@ package hl7_test
 import (
 	"testing"
 
-	"github.com/lenaten/hl7"
+	"github.com/freemed/hl7"
 )
 
 func TestFind(t *testing.T) {
@@ -11,8 +11,8 @@ func TestFind(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	msg := &hl7.Message{Value: data}
-	msg.Parse()
+	msg := &Message{Value: []rune(string(data))}
+	msg.parse()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -39,8 +39,8 @@ func TestFindAll(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	msg := &hl7.Message{Value: data}
-	msg.Parse()
+	msg := &Message{Value: []rune(string(data))}
+	msg.parse()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -73,8 +73,8 @@ func TestRepFields(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	msg := &hl7.Message{Value: data}
-	msg.Parse()
+	msg := &Message{Value: []rune(string(data))}
+	msg.parse()
 	if err != nil {
 		t.Fatal(err)
 	}
