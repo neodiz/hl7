@@ -155,11 +155,18 @@ func (m *Message) parse() error {
 			ch = eof
 		}
 		ii++
+		if i >= len(m.Value) {
+			return nil
+		}
 		switch {
 		case ch == eof || (ch == endMsg && m.Delimeters.LFTermMsg):
 			//just for safety: cannot reproduce this on windows
+			start := i
+			if m.Value[i] == endMsg {
+				start++
+			}
 			safeii := map[bool]int{true: len(m.Value), false: ii}[ii > len(m.Value)]
-			v := m.Value[i:safeii]
+			v := m.Value[start:safeii]
 			if len(v) > 4 { // seg name + field sep
 				seg := Segment{Value: v}
 				seg.parse(&m.Delimeters)
@@ -167,7 +174,11 @@ func (m *Message) parse() error {
 			}
 			return nil
 		case ch == segTerm:
-			seg := Segment{Value: m.Value[i : ii-1]}
+			start := i
+			if m.Value[i] == endMsg {
+				start++
+			}
+			seg := Segment{Value: m.Value[start : ii-1]}
 			seg.parse(&m.Delimeters)
 			m.Segments = append(m.Segments, seg)
 			i = ii
@@ -255,10 +266,18 @@ func (m *Message) Unmarshal(it interface{}) error {
 		fld := stt.Field(i)
 		r := fld.Tag.Get("hl7")
 		if r != "" {
-			if val, _ := m.Find(r); val != "" {
-				if st.Field(i).CanSet() {
-					// TODO support fields other than string
-					//fldT := st.Field(i).Type()
+			if !st.Field(i).CanSet() {
+				continue
+			}
+
+			//TODO support fields other than string and []string
+			switch fld.Type.Kind() {
+			case reflect.Slice:
+				val, _ := m.FindAll(r)
+				st.Field(i).Set(reflect.ValueOf(val))
+
+			case reflect.String:
+				if val, _ := m.Find(r); val != "" {
 					st.Field(i).SetString(strings.TrimSpace(val))
 				}
 			}

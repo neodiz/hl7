@@ -59,5 +59,6 @@ func Marshal(m *Message, it interface{}) ([]byte, error) {
 			}
 		}
 	}
+	m.Set(NewLocation("MSH.1"), string(m.Delimeters.Field)+m.Delimeters.DelimeterField)
 	return []byte(string(m.Value)), nil
 }

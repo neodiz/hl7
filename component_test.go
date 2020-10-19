@@ -1,9 +1,7 @@
-package hl7_test
+package hl7
 
 import (
 	"testing"
-
-	"github.com/freemed/hl7"
 )
 
 func TestCompParse(t *testing.T) {
@@ -17,10 +15,10 @@ func TestCompParse(t *testing.T) {
 }
 
 func TestCompSet(t *testing.T) {
-	seps := hl7.NewDelimeters()
+	seps := NewDelimeters()
 	loc := "ZZZ.1.0.5"
-	l := hl7.NewLocation(loc)
-	cmp := &hl7.Component{}
+	l := NewLocation(loc)
+	cmp := &Component{}
 	err := cmp.Set(l, "TEST", seps)
 	if err != nil {
 		t.Error(err)

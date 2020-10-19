@@ -1,10 +1,8 @@
-package hl7_test
+package hl7
 
 import (
 	"os"
 	"testing"
-
-	"github.com/freemed/hl7"
 )
 
 func TestDecode(t *testing.T) {
@@ -16,7 +14,7 @@ func TestDecode(t *testing.T) {
 	defer file.Close()
 
 	st := my7{}
-	msgs, err := hl7.NewDecoder(file).Messages()
+	msgs, err := NewDecoder(file).Messages()
 	if err != nil {
 		t.Error(err)
 	}

@@ -1,11 +1,9 @@
-package hl7_test
+package hl7
 
 import (
 	"errors"
 	"os"
 	"testing"
-
-	"github.com/freemed/hl7"
 )
 
 func TestAcknowledge(t *testing.T) {
@@ -16,12 +14,12 @@ func TestAcknowledge(t *testing.T) {
 	}
 	defer file.Close()
 
-	msgs, err := hl7.NewDecoder(file).Messages()
+	msgs, err := NewDecoder(file).Messages()
 	if err != nil {
 		t.Fatal(err)
 	}
 	mi, err := msgs[0].Info()
-	ack := hl7.Acknowledge(mi, nil)
+	ack, _ := Acknowledge(mi, nil)
 	if ack == nil {
 		t.Fatal("Expected ACK message got nil")
 	}
@@ -30,16 +28,16 @@ func TestAcknowledge(t *testing.T) {
 	// 		fmt.Println(string(f.Value))
 	// 	}
 	// }
-	ack = hl7.Acknowledge(mi, errors.New("This is a test error"))
+	ack, _ = Acknowledge(mi, errors.New("This is a test error"))
 	if ack == nil {
 		t.Fatal("Expected ACK message got nil")
 	}
-	m := hl7.NewMsgInfo()
+	m := NewMsgInfo()
 	m.ReceivingApp = "ORG_REC_APP"
 	m.ReceivingFacility = "ORG_REC_FAC"
 	m.SendingApp = "ORG_SEND_APP"
 	m.SendingFacility = "ORG_SEND_FAC"
-	ack = hl7.Acknowledge(*m, errors.New("Fatal error"))
+	ack, _ = Acknowledge(*m, errors.New("Fatal error"))
 	if ack == nil {
 		t.Fatal("Expected ACK message got nil")
 	}

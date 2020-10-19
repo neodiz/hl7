@@ -1,12 +1,10 @@
-package hl7_test
+package hl7
 
 import (
 	"golang.org/x/net/html/charset"
 	"io/ioutil"
 	"os"
 	"testing"
-
-	"github.com/freemed/hl7"
 )
 
 func readFile(fname string) ([]byte, error) {
@@ -92,7 +90,7 @@ func TestMsgUnmarshal(t *testing.T) {
 	}
 	defer file.Close()
 
-	msgs, err := hl7.NewDecoder(file).Messages()
+	msgs, err := NewDecoder(file).Messages()
 	if err != nil {
 		t.Fatal(err)
 	}

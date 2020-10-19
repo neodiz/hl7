@@ -1,9 +1,7 @@
-package hl7_test
+package hl7
 
 import (
 	"testing"
-
-	"github.com/freemed/hl7"
 )
 
 func TestFind(t *testing.T) {

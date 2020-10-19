@@ -1,9 +1,7 @@
-package hl7_test
+package hl7
 
 import (
 	"testing"
-
-	"github.com/freemed/hl7"
 )
 
 func TestSegParse(t *testing.T) {
@@ -18,10 +16,10 @@ func TestSegParse(t *testing.T) {
 }
 
 func TestSegSet(t *testing.T) {
-	seps := hl7.NewDelimeters()
+	seps := NewDelimeters()
 	loc := "ZZZ.10"
-	l := hl7.NewLocation(loc)
-	seg := &hl7.Segment{}
+	l := NewLocation(loc)
+	seg := &Segment{}
 	err := seg.Set(l, "TEST", seps)
 	if err != nil {
 		t.Error(seg)

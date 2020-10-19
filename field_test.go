@@ -1,9 +1,7 @@
-package hl7_test
+package hl7
 
 import (
 	"testing"
-
-	"github.com/freemed/hl7"
 )
 
 func TestFieldParse(t *testing.T) {
@@ -17,10 +15,10 @@ func TestFieldParse(t *testing.T) {
 }
 
 func TestFieldSet(t *testing.T) {
-	seps := hl7.NewDelimeters()
-	fld := &hl7.Field{}
+	seps := NewDelimeters()
+	fld := &Field{}
 	loc := "ZZZ.1.10"
-	l := hl7.NewLocation(loc)
+	l := NewLocation(loc)
 	err := fld.Set(l, "TEST", seps)
 	if err != nil {
 		t.Error(err)
