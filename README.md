@@ -64,67 +64,67 @@ vals, err := msg.FindAll("PID.11.1")
 ### Message building
 
 ```go
-	// Using the MsgInfo struct to initialize a message and 
-	// adding to it with a custom struct
+// Using the MsgInfo struct to initialize a message and 
+// adding to it with a custom struct
 	
-	type PIDSegment struct {
-		FirstName string `hl7:"PID.5.1"`
-		LastName  string `hl7:"PID.5.0"`
-	}
+type PIDSegment struct {
+    FirstName string `hl7:"PID.5.1"`
+    LastName  string `hl7:"PID.5.0"`
+}
 
-	func CreateHL7WithMsgInfo () {
-		mi := hl7.MsgInfo{
-			SendingApp:        "MyApp",
-			SendingFacility:   "MyPlace",
-			ReceivingApp:      "EMR",
-			ReceivingFacility: "MedicalPlace",
-			MessageType:       "ORM^001",
-		}
+func CreateHL7WithMsgInfo () {
+    mi := hl7.MsgInfo{
+        SendingApp:        "MyApp",
+        SendingFacility:   "MyPlace",
+        ReceivingApp:      "EMR",
+        ReceivingFacility: "MedicalPlace",
+        MessageType:       "ORM^001",
+    }
 
-		msg, err := hl7.StartMessage(mi)
-		ps := PIDSegment{FirstName: "Davin", LastName: "Hills"}
-		bytes, err := hl7.Marshal(msg, &ps)
-		err = os.WriteFile("test1.hl7", bytes, os.ModeAppend)
-	}
+    msg, err := hl7.StartMessage(mi)
+    ps := PIDSegment{FirstName: "Davin", LastName: "Hills"}
+    bytes, err := hl7.Marshal(msg, &ps)
+    err = os.WriteFile("test1.hl7", bytes, os.ModeAppend)
+}
 	
-	// Creating an HL7 completely from custom structs
+// Creating an HL7 completely from custom structs
 
-	type MyHL7Message struct {
-		SendingApp        string `hl7:"MSH.3"`
-		SendingFacility   string `hl7:"MSH.4"`
-		ReceivingApp      string `hl7:"MSH.5"`
-		ReceivingFacility string `hl7:"MSH.6"`
-		MsgDate           string `hl7:"MSH.7"`
-		MessageType       string `hl7:"MSH.9"`
-		ControlID         string `hl7:"MSH.10"`
-		ProcessingID      string `hl7:"MSH.11"`
-		VersionID         string `hl7:"MSH.12"`
-	}
+type MyHL7Message struct {
+    SendingApp        string `hl7:"MSH.3"`
+    SendingFacility   string `hl7:"MSH.4"`
+    ReceivingApp      string `hl7:"MSH.5"`
+    ReceivingFacility string `hl7:"MSH.6"`
+    MsgDate           string `hl7:"MSH.7"`
+    MessageType       string `hl7:"MSH.9"`
+    ControlID         string `hl7:"MSH.10"`
+    ProcessingID      string `hl7:"MSH.11"`
+    VersionID         string `hl7:"MSH.12"`
+}
 
-	type PIDSegment struct {
-		FirstName string `hl7:"PID.5.1"`
-		LastName  string `hl7:"PID.5.0"`
-	}
+type PIDSegment struct {
+    FirstName string `hl7:"PID.5.1"`
+    LastName  string `hl7:"PID.5.0"`
+}
 
-	func CreateHL7WithCustomStruct() {	
-		my := MyHL7Message{
-			SendingApp:        "MyApp",
-			SendingFacility:   "MyPlace",
-			ReceivingApp:      "EMR",
-			ReceivingFacility: "MedicalPlace",
-			MessageType:       "ORM^001",
-			MsgDate:           "20151209154606",
-			ControlID:         "MSGID1",
-			ProcessingID:      "P",
-			VersionID:         "2.4",
-		}
-		ps := PIDSegment{FirstName: "Davin", LastName: "Hills"}
+func CreateHL7WithCustomStruct() {	
+        my := MyHL7Message{
+        SendingApp:        "MyApp",
+        SendingFacility:   "MyPlace",
+        ReceivingApp:      "EMR",
+        ReceivingFacility: "MedicalPlace",
+        MessageType:       "ORM^001",
+        MsgDate:           "20151209154606",
+        ControlID:         "MSGID1",
+        ProcessingID:      "P",
+        VersionID:         "2.4",
+    }
+    ps := PIDSegment{FirstName: "Davin", LastName: "Hills"}
 
-		file, err := os.OpenFile("test2.hl7", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+    file, err := os.OpenFile("test2.hl7", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 
-		err = hl7.NewEncoder(file).Encode(&my)
-		err = hl7.NewEncoder(file).Encode(&ps)
-	}
+    err = hl7.NewEncoder(file).Encode(&my)
+    err = hl7.NewEncoder(file).Encode(&ps)
+}
 ```
 
 ### Message Validation
