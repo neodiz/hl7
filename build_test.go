@@ -3,7 +3,7 @@ package hl7_test
 import (
 	"testing"
 
-	"github.com/freemed/hl7"
+	"github.com/borisrodman/hl7"
 )
 
 func TestBuildMessage(t *testing.T) {

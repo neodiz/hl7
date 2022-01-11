@@ -1,10 +1,11 @@
 package hl7
 
 import (
-	"golang.org/x/net/html/charset"
 	"io/ioutil"
 	"os"
 	"testing"
+
+	"golang.org/x/net/html/charset"
 )
 
 func readFile(fname string) ([]byte, error) {
@@ -94,13 +95,13 @@ func TestMsgUnmarshal(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	st := my7{}
-	msgs[0].Unmarshal(&st)
+	ps := PIDSegment{}
+	msgs[0].Unmarshal(&ps)
 
-	if st.FirstName != "John" {
-		t.Errorf("Expected John got %s\n", st.FirstName)
+	if ps.FirstName != "John" {
+		t.Errorf("Expected John got %s\n", ps.FirstName)
 	}
-	if st.LastName != "Jones" {
-		t.Errorf("Expected Jones got %s\n", st.LastName)
+	if ps.LastName != "Jones" {
+		t.Errorf("Expected Jones got %s\n", ps.LastName)
 	}
 }

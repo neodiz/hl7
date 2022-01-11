@@ -1,4 +1,4 @@
-# Go Level 7 [![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](https://godoc.org/github.com/lenaten/hl7)
+# Go Level 7 [![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](https://godoc.org/github.com/borisrodman/hl7)
 
 ## Overview
 
@@ -16,7 +16,7 @@
 Note: Message building is not currently working for MSH segments. Coming soon...
 
 ## Installation
-	go get github.com/lenaten/hl7
+	go get github.com/borisrodman/hl7
 
 ## Usage
 
@@ -36,17 +36,17 @@ Note: Message building is not currently working for MSH segments. Coming soon...
 
 ```go
 data := []byte(...) // raw message
-type my7 struct {
+type PIDSegment struct {
 	FirstName string `hl7:"PID.5.1"`
 	LastName  string `hl7:"PID.5.0"`
 }
-st := my7{}
+ps := PIDSegment{}
 
-err := hl7.Unmarshal(data, &st)
+err := hl7.Unmarshal(data, &ps)
 
 // from an io.Reader
 
-hl7.NewDecoder(reader).Decode(&st)
+hl7.NewDecoder(reader).Decode(&ps)
 ```
 
 ### Message Query
@@ -64,22 +64,30 @@ vals, err := msg.FindAll("PID.11.1")
 ### Message building
 
 ```go
-	type aMsg struct {
+	// Using the MsgInfo struct to initialize a message and 
+	// adding to it with a custom struct
+	
+	type PIDSegment struct {
 		FirstName string `hl7:"PID.5.1"`
 		LastName  string `hl7:"PID.5.0"`
 	}
-	mi := hl7.MsgInfo{
-		SendingApp:        "MyApp",
-		SendingFacility:   "MyPlace",
-		ReceivingApp:      "EMR",
-		ReceivingFacility: "MedicalPlace",
-		MessageType:       "ORM^001",
-	}
-	msg, err := hl7.StartMessage(mi)
-	am := aMsg{FirstName: "Davin", LastName: "Hills"}
-	bstr, err = hl7.Marshal(msg, &am)
 
-	// Manually
+	func CreateHL7WithMsgInfo () {
+		mi := hl7.MsgInfo{
+			SendingApp:        "MyApp",
+			SendingFacility:   "MyPlace",
+			ReceivingApp:      "EMR",
+			ReceivingFacility: "MedicalPlace",
+			MessageType:       "ORM^001",
+		}
+
+		msg, err := hl7.StartMessage(mi)
+		ps := PIDSegment{FirstName: "Davin", LastName: "Hills"}
+		bytes, err := hl7.Marshal(msg, &ps)
+		err = os.WriteFile("test1.hl7", bytes, os.ModeAppend)
+	}
+	
+	// Creating an HL7 completely from custom structs
 
 	type MyHL7Message struct {
 		SendingApp        string `hl7:"MSH.3"`
@@ -91,24 +99,32 @@ vals, err := msg.FindAll("PID.11.1")
 		ControlID         string `hl7:"MSH.10"`
 		ProcessingID      string `hl7:"MSH.11"`
 		VersionID         string `hl7:"MSH.12"`
-		FirstName         string `hl7:"PID.5.1"`
-		LastName          string `hl7:"PID.5.0"`
 	}
 
-	my := MyHL7Message{
-		SendingApp:        "MyApp",
-		SendingFacility:   "MyPlace",
-		ReceivingApp:      "EMR",
-		ReceivingFacility: "MedicalPlace",
-		MessageType:       "ORM^001",
-		MsgDate:           "20151209154606",
-		ControlID:         "MSGID1",
-		ProcessingID:      "P",
-		VersionID:         "2.4",
-		FirstName:         "Davin",
-		LastName:          "Hills",
+	type PIDSegment struct {
+		FirstName string `hl7:"PID.5.1"`
+		LastName  string `hl7:"PID.5.0"`
 	}
-	err := hl7.NewEncoder(writer).Encode(&my)
+
+	func CreateHL7WithCustomStruct() {	
+		my := MyHL7Message{
+			SendingApp:        "MyApp",
+			SendingFacility:   "MyPlace",
+			ReceivingApp:      "EMR",
+			ReceivingFacility: "MedicalPlace",
+			MessageType:       "ORM^001",
+			MsgDate:           "20151209154606",
+			ControlID:         "MSGID1",
+			ProcessingID:      "P",
+			VersionID:         "2.4",
+		}
+		ps := PIDSegment{FirstName: "Davin", LastName: "Hills"}
+
+		file, err := os.OpenFile("test2.hl7", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+
+		err = hl7.NewEncoder(file).Encode(&my)
+		err = hl7.NewEncoder(file).Encode(&ps)
+	}
 ```
 
 ### Message Validation
@@ -126,15 +142,6 @@ val := []hl7.Validation{
 msg, err := hl7.NewDecoder(reader).Message()
 valid, failures := msg.IsValid(val)
 ```
-
-## To Do
-
-* Better handling of repeating fields for marshal and unmarshal
-* Better handling of repeating segments for marshal and unmarshal
-
-## Alternatives
-
-* [gohl7](https://github.com/yehezkel/gohl7)
 
 ## License
 Copyright 2015, 2016 Davin Hills. All rights reserved.

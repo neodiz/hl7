@@ -19,7 +19,9 @@ func NewEncoder(w io.Writer) *Encoder {
 // Encode writes the encoding of it to the stream
 // It will panic if interface{} is not a pointer to a struct
 func (e *Encoder) Encode(it interface{}) error {
-	msg := &Message{}
+	msg := &Message{
+		Delimeters: *NewDelimeters(),
+	}
 	b, err := Marshal(msg, it)
 	if err != nil {
 		return err
@@ -59,6 +61,6 @@ func Marshal(m *Message, it interface{}) ([]byte, error) {
 			}
 		}
 	}
-	m.Set(NewLocation("MSH.1"), string(m.Delimeters.Field)+m.Delimeters.DelimeterField)
+
 	return []byte(string(m.Value)), nil
 }

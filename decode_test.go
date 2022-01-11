@@ -13,7 +13,7 @@ func TestDecode(t *testing.T) {
 	}
 	defer file.Close()
 
-	st := my7{}
+	ps := PIDSegment{}
 	msgs, err := NewDecoder(file).Messages()
 	if err != nil {
 		t.Error(err)
@@ -21,13 +21,13 @@ func TestDecode(t *testing.T) {
 	if len(msgs) != 1 {
 		t.Fatalf("Expected 1 message got %v\n", len(msgs))
 	}
-	if err := msgs[0].Unmarshal(&st); err != nil {
+	if err := msgs[0].Unmarshal(&ps); err != nil {
 		t.Fatal(err)
 	}
-	if st.FirstName != "John" {
-		t.Errorf("Expected John got %s\n", st.FirstName)
+	if ps.FirstName != "John" {
+		t.Errorf("Expected John got %s\n", ps.FirstName)
 	}
-	if st.LastName != "Jones" {
-		t.Errorf("Expected Jones got %s\n", st.LastName)
+	if ps.LastName != "Jones" {
+		t.Errorf("Expected Jones got %s\n", ps.LastName)
 	}
 }
