@@ -2,8 +2,9 @@
 
 ## Overview
 
-	Go Level 7 is a decoder / encoder for HL7.
-> 	Health Level-7 or HL7 refers to a set of international standards for transfer of clinical and administrative data between software applications used by various healthcare providers. These standards focus on the application layer, which is "layer 7" in the OSI model. -Wikipedia
+	This is a fork of Davin Hills' Go Level 7 library for creation/manipulation of HL7 files.
+    
+> 	HL7 segment specs can be found here: https://hl7-definition.caristix.com/v2/HL7v2.4/Segments
 
 ## Features
 
@@ -31,36 +32,7 @@ Note: Message building is not currently working for MSH segments. Coming soon...
 	"PID.5" returns the 5th field of the PID segment
 	"PID.5.1" returns the 1st component of the 5th field of the PID segment
 	"PID.5.1.2" returns the 2nd subcomponent of the 1st component of the 5th field of the PID
-
-###	Data Extraction / Unmarshal
-
-```go
-data := []byte(...) // raw message
-type PIDSegment struct {
-	FirstName string `hl7:"PID.5.1"`
-	LastName  string `hl7:"PID.5.0"`
-}
-ps := PIDSegment{}
-
-err := hl7.Unmarshal(data, &ps)
-
-// from an io.Reader
-
-hl7.NewDecoder(reader).Decode(&ps)
-```
-
-### Message Query
-
-```go
-msg, err := hl7.NewDecoder(reader).Message()
-
-// First matching value
-val, err := msg.Find("PID.5.1")
-
-// All matching values
-vals, err := msg.FindAll("PID.11.1")
-```
-
+    
 ### Message building
 
 ```go
@@ -112,6 +84,35 @@ func CreateHL7() {
     err = hl7.NewEncoder(file).Encode(&pid)
     err = hl7.NewEncoder(file).Encode(&pv1)
 }
+```
+
+###	Data Extraction / Unmarshal
+
+```go
+data := []byte(...) // raw message
+type PIDSegment struct {
+	FirstName string `hl7:"PID.5.1"`
+	LastName  string `hl7:"PID.5.0"`
+}
+ps := PIDSegment{}
+
+err := hl7.Unmarshal(data, &ps)
+
+// from an io.Reader
+
+hl7.NewDecoder(reader).Decode(&ps)
+```
+
+### Message Query
+
+```go
+msg, err := hl7.NewDecoder(reader).Message()
+
+// First matching value
+val, err := msg.Find("PID.5.1")
+
+// All matching values
+vals, err := msg.FindAll("PID.11.1")
 ```
 
 ### Message Validation
