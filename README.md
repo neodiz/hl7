@@ -1,9 +1,9 @@
-# Go Level 7 [![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](https://godoc.org/github.com/borisrodman/hl7)
+# HL7 [![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](https://godoc.org/github.com/borisrodman/hl7)
 
 ## Overview
 
 	This is a fork of Davin Hills' Go Level 7 library for creation/manipulation of HL7 files.
-    
+
 > 	HL7 segment specs can be found here: https://hl7-definition.caristix.com/v2/HL7v2.4/Segments
 
 ## Features
@@ -36,7 +36,7 @@ Note: Message building is not currently working for MSH segments. Coming soon...
 ### Message building
 
 ```go
-type MyHL7Message struct {
+type MSHSegment struct {
 	FieldSeparator     string `hl7:"MSH.1" hl7default:"^~\\&"`
 	EncodingCharacters string `hl7:"MSH.2" hl7default:""`
     SendingApp        string `hl7:"MSH.3"`
@@ -63,7 +63,7 @@ type PV1Segment struct {
 }
 
 func CreateHL7() {
-        my := MyHL7Message{
+    msh := MSHSegment{
         SendingApp:        "MyApp",
         SendingFacility:   "MyPlace",
         ReceivingApp:      "EMR",
@@ -80,7 +80,7 @@ func CreateHL7() {
     file, err := os.OpenFile("test.hl7", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
     defer os.close(file)
 
-    err = hl7.NewEncoder(file).Encode(&my)
+    err = hl7.NewEncoder(file).Encode(&msh)
     err = hl7.NewEncoder(file).Encode(&pid)
     err = hl7.NewEncoder(file).Encode(&pv1)
 }
