@@ -122,13 +122,7 @@ func (s *Segment) encode(seps *Delimeters) []rune {
 	for _, f := range s.Fields {
 		buf = append(buf, string(f.Value))
 	}
-	if s.isMSH() {
-		firstFields := strings.Join(buf[0:3], "")
-		otherFields := strings.Join(buf[3:], string(seps.Field))
-		return []rune(strings.Join([]string{firstFields, otherFields}, string(seps.Field)))
-	} else {
-		return []rune(strings.Join(buf, string(seps.Field)))
-	}
+	return []rune(strings.Join(buf, string(seps.Field)))
 }
 
 // Field returns the field with sequence number i

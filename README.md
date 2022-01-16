@@ -64,32 +64,9 @@ vals, err := msg.FindAll("PID.11.1")
 ### Message building
 
 ```go
-// Using the MsgInfo struct to initialize a message and 
-// adding to it with a custom struct
-	
-type PIDSegment struct {
-    FirstName string `hl7:"PID.5.1"`
-    LastName  string `hl7:"PID.5.0"`
-}
-
-func CreateHL7WithMsgInfo () {
-    mi := hl7.MsgInfo{
-        SendingApp:        "MyApp",
-        SendingFacility:   "MyPlace",
-        ReceivingApp:      "EMR",
-        ReceivingFacility: "MedicalPlace",
-        MessageType:       "ORM^001",
-    }
-
-    msg, err := hl7.StartMessage(mi)
-    ps := PIDSegment{FirstName: "Davin", LastName: "Hills"}
-    bytes, err := hl7.Marshal(msg, &ps)
-    err = os.WriteFile("test1.hl7", bytes, os.ModeAppend)
-}
-	
-// Creating an HL7 completely from custom structs
-
 type MyHL7Message struct {
+	FieldSeparator     string `hl7:"MSH.1" hl7default:"^~\\&"`
+	EncodingCharacters string `hl7:"MSH.2" hl7default:""`
     SendingApp        string `hl7:"MSH.3"`
     SendingFacility   string `hl7:"MSH.4"`
     ReceivingApp      string `hl7:"MSH.5"`
@@ -98,7 +75,7 @@ type MyHL7Message struct {
     MessageType       string `hl7:"MSH.9"`
     ControlID         string `hl7:"MSH.10"`
     ProcessingID      string `hl7:"MSH.11"`
-    VersionID         string `hl7:"MSH.12"`
+	VersionID          string `hl7:"MSH.12" hl7default:"2.4"`
 }
 
 type PIDSegment struct {
@@ -106,7 +83,14 @@ type PIDSegment struct {
     LastName  string `hl7:"PID.5.0"`
 }
 
-func CreateHL7WithCustomStruct() {	
+type PV1Segment struct {
+	SetID                   string `hl7:"PV1.1"`
+	PatientClass            string `hl7:"PV1.2"`
+	AssignedPatientLocation string `hl7:"PV1.3"`
+	AdmissionType           string `hl7:"PV1.4"`
+}
+
+func CreateHL7() {
         my := MyHL7Message{
         SendingApp:        "MyApp",
         SendingFacility:   "MyPlace",
@@ -118,12 +102,15 @@ func CreateHL7WithCustomStruct() {
         ProcessingID:      "P",
         VersionID:         "2.4",
     }
-    ps := PIDSegment{FirstName: "Davin", LastName: "Hills"}
+    pid := PIDSegment{FirstName: "Davin", LastName: "Hills"}
+    pv1 := datamodel.PV1Segment{SetID: "0001", PatientClass: "I", AdmissionType: "O"}
 
-    file, err := os.OpenFile("test2.hl7", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+    file, err := os.OpenFile("test.hl7", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+    defer os.close(file)
 
     err = hl7.NewEncoder(file).Encode(&my)
-    err = hl7.NewEncoder(file).Encode(&ps)
+    err = hl7.NewEncoder(file).Encode(&pid)
+    err = hl7.NewEncoder(file).Encode(&pv1)
 }
 ```
 
