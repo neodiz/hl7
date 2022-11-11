@@ -1,4 +1,4 @@
-module github.com/borisrodman/hl7
+module github.com/neodiz/hl7
 
 go 1.12
 
