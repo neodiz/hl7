@@ -35,6 +35,9 @@ func NewMessage(v []byte) *Message {
 		Delimeters: *NewDelimeters(),
 	}
 }
+func (m *Message) Parse() error {
+   return m.parse()
+}
 
 func (m *Message) String() string {
 	var str string
