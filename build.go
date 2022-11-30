@@ -7,15 +7,16 @@ import (
 
 // MsgInfo describes the basic message fields
 type MsgInfo struct {
-	SendingApp        string `hl7:"MSH.3"`
-	SendingFacility   string `hl7:"MSH.4"`
-	ReceivingApp      string `hl7:"MSH.5"`
-	ReceivingFacility string `hl7:"MSH.6"`
-	MsgDate           string `hl7:"MSH.7"`  // if blank will generate
-	MessageType       string `hl7:"MSH.9"`  // Required example ORM^001
-	ControlID         string `hl7:"MSH.10"` // if blank will generate
-	ProcessingID      string `hl7:"MSH.11"` // default P
-	VersionID         string `hl7:"MSH.12"` // default 2.4
+	ServiceSymbol     string `hl7:"MSH.1"`
+	SendingApp        string `hl7:"MSH.2"`
+	SendingFacility   string `hl7:"MSH.3"`
+	ReceivingApp      string `hl7:"MSH.4"`
+	ReceivingFacility string `hl7:"MSH.5"`
+	MsgDate           string `hl7:"MSH.6"`  // if blank will generate
+	MessageType       string `hl7:"MSH.8"`  // Required example ORM^001
+	ControlID         string `hl7:"MSH.9"` // if blank will generate
+	ProcessingID      string `hl7:"MSH.10"` // default P
+	VersionID         string `hl7:"MSH.11"` // default 2.4
 }
 
 // NewMsgInfo returns a MsgInfo with controlID, message date, Processing Id, and Version set
