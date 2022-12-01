@@ -17,6 +17,7 @@ type MsgInfo struct {
 	ControlID         string `hl7:"MSH.9"` // if blank will generate
 	ProcessingID      string `hl7:"MSH.10"` // default P
 	VersionID         string `hl7:"MSH.11"` // default 2.4
+	Encoding          string `hl7:"MSH.17"`
 }
 
 // NewMsgInfo returns a MsgInfo with controlID, message date, Processing Id, and Version set
